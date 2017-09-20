@@ -7,7 +7,7 @@ def download_periodic_data():
 	return True
 
 def download_daily_data(pISIN):
-	stock_info = ss.get_main_url_by_ISIN(ISIN)
+	stock_info = ss.get_main_url_by_ISIN(pISIN)
 	if stock_info != {}:
 		#Sample of the object recd from get_main_url_by_ISIN()
 		#{
@@ -25,7 +25,7 @@ def download_daily_data(pISIN):
 				"sector_primary": stock_info.sector_name,
 				"code_sector_mc": stock_info.sector_id
 		},
-		db.write(pISIN, obj)
+		db.db_write_company(pISIN, obj)
 	return False
 
 if __name__ == "__main__":

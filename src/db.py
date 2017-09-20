@@ -24,18 +24,20 @@ def db_transact(db_func, pObj):
 	try:
 		obj = db_func(pObj)
 	except pymongo.errors.ConnectionFailure:
+		logging.error("DB Connection Failure")
 		pass
 	except:
+		logging.error("Unhandled exception")
 		pass
 
 def db_write_company(ISIN, obj, replace = False):
+	print(ISIN, obj)
 	db = establish_conn()
 	if db == None:
 		return None
 	stock = db_transact(db.stocks.find_one, {"isin":ISIN})
 	if stock == None:
 		return None
-	obj['_id'] = stock['_id']
 	db_transact(db.stocks.insert_one, obj)
 
 if __name__ == "__main__":
