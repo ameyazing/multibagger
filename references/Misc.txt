@@ -1,0 +1,3 @@
+Sample ISIN code which returns 'Not Found' on moneycontrol: INE600A01035
+Not traded on a particular exchange: http://www.moneycontrol.com/india/stockpricequote/miscellaneous/timexgroupindia/TGI
+
