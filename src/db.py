@@ -50,3 +50,5 @@ if __name__ == "__main__":
 	}
 	db = establish_conn()
 	print(db)
+	db.db_write_company("1234567890", stock1)
+
