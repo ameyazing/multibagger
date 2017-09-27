@@ -25,13 +25,16 @@ def db_transact(db_func, pObj):
 		obj = db_func(pObj)
 	except pymongo.errors.ConnectionFailure:
 		logging.error("DB Connection Failure")
-		pass
 	except:
 		logging.error("Unhandled exception")
-		pass
 
+#criteria: JSON object which will be the criteria for which doc to update
+#upsert: Create new doc if criteria fails
+#obj: JSON object containing all keys who's values need to be udpated
+#Return value: 
+def db_update_one(ISIN, obj, criteria, upsert=True):
+	
 def db_write_company(ISIN, obj, replace = False):
-	print(ISIN, obj)
 	db = establish_conn()
 	if db == None:
 		return None
