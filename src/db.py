@@ -2,14 +2,14 @@ from pymongo import MongoClient
 import logging
 
 #TODO: Replace this global variable with state maintained in Actor-model / gen_server
-DB = None
+GLOBAL_DB = None
 
 #If connection is already established, return connection handle
 #If connection is not establish, establish a new connectin and return connection handle
 def establish_conn():
-	global DB
-	if  DB != None:
-		return DB
+	global GLOBAL_DB
+	if  GLOBAL_DB != None:
+		return GLOBAL_DB
 	client = MongoClient()
 	try:
 		client.admin.command('ismaster')
@@ -17,8 +17,8 @@ def establish_conn():
 		logging.error("Failed to establish connection to db")
 		client = None
 		return None
-	DB = client.stocks
-	return DB
+	GLOBAL_DB = client.stocks
+	return GLOBAL_DB
 
 def db_transact(db_func, pObj):
 	try:

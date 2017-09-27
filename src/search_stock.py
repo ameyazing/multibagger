@@ -2,7 +2,7 @@ import json
 import logging
 import download_page as dp
 
-URL='http://www.moneycontrol.com/mccode/common/autosuggesion.php?query={s_ISIN}&type=1&format=json&callback=suggest1'
+GLOBAL_URL='http://www.moneycontrol.com/mccode/common/autosuggesion.php?query={s_ISIN}&type=1&format=json&callback=suggest1'
 
 def search_by_ISIN(pURL):
 	logging.info("URL={s_URL}".format(s_URL=pURL))
@@ -32,7 +32,7 @@ def parse_response(response_str, ISIN):
 		return {}
 
 def get_main_url_by_ISIN(ISIN):
-	resp = search_by_ISIN(URL.format(s_ISIN=ISIN))
+	resp = search_by_ISIN(GLOBAL_URL.format(s_ISIN=ISIN))
 	if resp.status_code == 200:
 		ret_val = parse_response(resp.text, ISIN)
 		return ret_val

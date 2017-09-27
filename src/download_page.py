@@ -1,7 +1,7 @@
 import requests
 from requests.models import Response
 
-URL='http://www.moneycontrol.com/mccode/common/autosuggesion.php?query=INE002A01018&type=1&format=json&callback=suggest1'
+MODULE_URL='http://www.moneycontrol.com/mccode/common/autosuggesion.php?query=INE002A01018&type=1&format=json&callback=suggest1'
 #URL='http://www.qoweurasdnkajefuio.com'
 
 def download_page(pURL, max_retry=3, attempt=0):
@@ -41,7 +41,7 @@ def download_page(pURL, max_retry=3, attempt=0):
 		return response
 
 if __name__ == "__main__":
-	response = download_page(URL)
+	response = download_page(MODULE_URL)
 	if response.status_code == 200:
 		print(response.text)
 	else:
