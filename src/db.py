@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import pymongo
 import logging
+import sys
 
 #TODO: Replace this global variable with state maintained in Actor-model / gen_server
 GLOBAL_DB = None
@@ -40,7 +41,7 @@ def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 	update_result = None
 	try:
 		if replace == True:
-			update_result = db.stocks.replace_one({"isin":pISIN},{"$set":obj}, upsert=upsert)
+			update_result = db.stocks.replace_one({"isin":pISIN},obj, upsert=upsert)
 		else:
 			update_result = db.stocks.update_one({"isin":pISIN},{"$set":obj}, upsert=upsert)
 	except pymongo.errors.ConnectionFailure:
@@ -60,8 +61,8 @@ def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 	except pymongo.errors.WriteError:
 		#logging.error("DB Write Error (error:{}, code:{}, details:{})".format(e.error, e.code, e.details))
 		logging.error("DB Write Error")
-	except:
-		logging.error("DB Unhandled error")
+	except Exception as e:
+		logging.error("DB Unhandled error; {}".format(e))
 	if update_result.acknowledged == True:
 		return update_result.upserted_id
 	else:
@@ -78,17 +79,19 @@ def db_write_company(ISIN, obj, replace = False):
 
 def test_function():
 	stock1 = {
+		'isin': '1234567890',
 		'company_name': 'Maruti Suzuki India',
-#		'main_page_url': 'http://www.moneycontrol.com/india/stockpricequote/autocarsjeeps/marutisuzukiindia/MS24',
+		'main_page_url': 'http://www.moneycontrol.com/india/stockpricequote/autocarsjeeps/marutisuzukiindia/MS24',
 		'company_id': 'MU01',
-#		'sector_name': 'Automotive',
-#		'sector_id': 'AU'
+		'sector_name': 'Automotive',
+		'sector_id': 'AU'
 	}
 	db_handle = establish_conn()
 	if db_handle == None:
 		print("Failed to establish connection")
 		return
 	db_write_company("1234567890", stock1, replace=True)
+	#db_write_company("1234567890", stock1, replace=False)
 
 if __name__ == "__main__":
 	print("Executing db __main__")
