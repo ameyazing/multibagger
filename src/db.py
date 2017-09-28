@@ -43,6 +43,7 @@ def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 		if replace == True:
 			update_result = db.stocks.replace_one({"isin":pISIN},obj, upsert=upsert)
 		else:
+			print("in update_one()")
 			update_result = db.stocks.update_one({"isin":pISIN},{"$set":obj}, upsert=upsert)
 	except pymongo.errors.ConnectionFailure:
 		logging.error("DB Connection Failure")
@@ -59,7 +60,6 @@ def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 	except pymongo.errors.NetworkTimeout:
 		logging.error("DB Network Timeout")
 	except pymongo.errors.WriteError:
-		#logging.error("DB Write Error (error:{}, code:{}, details:{})".format(e.error, e.code, e.details))
 		logging.error("DB Write Error")
 	except Exception as e:
 		logging.error("DB Unhandled error; {}".format(e))
@@ -70,6 +70,7 @@ def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 		return None
 
 def db_write_company(ISIN, obj, replace = False):
+	logging.info("Recd ISIN: {}; obj: {}".format(ISIN, obj))
 	db = establish_conn()
 	if db == None:
 		return None

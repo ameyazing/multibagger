@@ -51,7 +51,6 @@ def loadFromFile(pFileName):
 if __name__ == "__main__":
 	setup_logging()
 	ISINs = loadFromFile("../data/ISIN.dat")
-	print("__main__: {0}".format(ISINs))
 	download_daily_data(ISINs)
 	#download_periodic_data()
 

@@ -19,14 +19,15 @@ def download_daily_data(pISIN):
 		#}
 		obj = {
 				"isin": pISIN,
-				"company_name": stock_info.company_name,
-				"mc_url": stock_info.main_page_url,
-				"code_mc": stock_info.company_id,
-				"sector_primary": stock_info.sector_name,
-				"code_sector_mc": stock_info.sector_id
+				"company_name": stock_info['company_name'],
+				"mc_url": stock_info['main_page_url'],
+				"code_mc": stock_info['company_id'],
+				"sector_primary": stock_info['sector_name'],
+				"code_sector_mc": stock_info['sector_id']
 		},
-		db.db_write_company(pISIN, obj)
-	return False
+		logging.info("before db_write_company obj: {}".format(obj))
+		db.db_write_company(pISIN, obj, replace=False)
+	return True
 
 if __name__ == "__main__":
 	download_periodic_data()
