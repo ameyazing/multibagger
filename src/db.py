@@ -22,13 +22,9 @@ def establish_conn():
 	GLOBAL_DB = client.stocks
 	return GLOBAL_DB
 
-def db_transact(db_func, pObj):
-	try:
-		obj = db_func(pObj)
-	except pymongo.errors.ConnectionFailure:
-		logging.error("DB Connection Failure")
-	except:
-		logging.error("Unhandled exception")
+#pCursor: If None, creates a new iterable cursor. Else fetches next object on pCursor
+def get_next_company(pCursor):
+	pass
 
 #criteria: JSON object which will be the criteria for which doc to update
 #upsert: Create new doc if criteria fails

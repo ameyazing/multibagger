@@ -17,7 +17,7 @@ def parse_response(response_str, ISIN):
 	if len(parsed) > 0:
 		stock_obj = parsed[0]
 		if stock_obj['link_src'] == 'javascript:void(0)':
-			logging.info("No company found for with ISIN {s_ISIN}".format(s_ISIN=ISIN))
+			logging.warning("No company found for with ISIN {s_ISIN}".format(s_ISIN=ISIN))
 			return {}
 		else:
 			ret_val = {
