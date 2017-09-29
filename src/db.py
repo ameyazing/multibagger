@@ -41,9 +41,10 @@ def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 	update_result = None
 	try:
 		if replace == True:
+			print("Replacing ISIN: {}".format(pISIN))
 			update_result = db.stocks.replace_one({"isin":pISIN},obj, upsert=upsert)
 		else:
-			print("in update_one()")
+			print("Updating ISIN: {}".format(pISIN))
 			update_result = db.stocks.update_one({"isin":pISIN},{"$set":obj}, upsert=upsert)
 	except pymongo.errors.ConnectionFailure:
 		logging.error("DB Connection Failure")
@@ -59,8 +60,8 @@ def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 		logging.error("DB Invalid URI")
 	except pymongo.errors.NetworkTimeout:
 		logging.error("DB Network Timeout")
-	except pymongo.errors.WriteError:
-		logging.error("DB Write Error")
+#	except pymongo.errors.WriteError:
+#		logging.error("DB Write Error")
 	except Exception as e:
 		logging.error("DB Unhandled error; {}".format(e))
 	if update_result.acknowledged == True:

@@ -25,7 +25,8 @@ def download_daily_data(pISIN):
 				"sector_primary": stock_info['sector_name'],
 				"code_sector_mc": stock_info['sector_id']
 		},
-		logging.info("before db_write_company obj: {}".format(obj))
+		obj = obj[0]
+		logging.info("before db_write_company ISIN: {}; obj: {}".format(pISIN, obj))
 		db.db_write_company(pISIN, obj, replace=False)
 	return True
 
