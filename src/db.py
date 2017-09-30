@@ -22,8 +22,9 @@ def establish_conn():
 	GLOBAL_DB = client.stocks
 	return GLOBAL_DB
 
-#pCursor: If None, creates a new iterable cursor. Else fetches next object on pCursor
-def get_next_company(pCursor):
+#pFunc: Function to call for each document in cursor
+#criteria: Criteria for find(). Check for None
+def execute_for_companies(pFunc, criteria=None):
 	pass
 
 #criteria: JSON object which will be the criteria for which doc to update
@@ -33,6 +34,7 @@ def get_next_company(pCursor):
 def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 	db = establish_conn()
 	if db == None:
+		logging.critical
 		return None
 	update_result = None
 	try:
@@ -56,8 +58,8 @@ def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 		logging.error("DB Invalid URI")
 	except pymongo.errors.NetworkTimeout:
 		logging.error("DB Network Timeout")
-#	except pymongo.errors.WriteError:
-#		logging.error("DB Write Error")
+	except pymongo.errors.WriteError as e:
+		logging.error("DB Write Error. err={}; code={}; dtls={}".format(e.error, e.code, e.details))
 	except Exception as e:
 		logging.error("DB Unhandled error; {}".format(e))
 	if update_result.acknowledged == True:
