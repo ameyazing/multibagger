@@ -23,9 +23,48 @@ def establish_conn():
 	return GLOBAL_DB
 
 #pFunc: Function to call for each document in cursor
-#criteria: Criteria for find(). Check for None
-def execute_for_companies(pFunc, criteria=None):
-	pass
+#pCriteria: Criteria for find(). Check for None
+#Return value: {Success count, Failure Count}
+def execute_for_each_companies(pFunc, pCriteria=None):
+	db = establish_conn()
+	if db == None:
+		logging.critical("Failed to connect to DB")
+		return None
+	cursor = None
+	criteria = {} if pCriteria == None else pCriteria
+	try:
+		cursor = db.stocks.find(criteria, snapshot=True)
+	except pymongo.errors.ConnectionFailure:
+		logging.error("DB Connection Failure")
+	except pymongo.errors.ConfigurationError:
+		logging.error("DB Configuration Error")
+	except pymongo.errors.CollectionInvalid:
+		logging.error("DB Collection Invalid")
+	except pymongo.errors.InvalidName:
+		logging.error("DB Invalid Name")
+	except pymongo.errors.InvalidOperation:
+		logging.error("DB Invalid Operation")
+	except pymongo.errors.InvalidURI:
+		logging.error("DB Invalid URI")
+	except pymongo.errors.NetworkTimeout:
+		logging.error("DB Network Timeout")
+	except pymongo.errors.WriteError as e:
+		logging.error("DB Write Error. err={}; code={}; dtls={}".format(e.error, e.code, e.details))
+	except Exception as e:
+		logging.error("DB Unhandled error; {}".format(e))
+	success_count = 0
+	failure_count = 0
+	for obj in cursor:
+		try:
+			retVal = pFunc(obj) #Expected to return True / False for success / failure respectively
+		except Exception as e:
+			logging.warning("Callback function crashed")
+		if retVal == True:
+			success_count = success_count + 1
+		else:
+			failure_count = failure_count + 1
+	logging.info("Iteration completed")
+	return (success_count, failure_count)
 
 #criteria: JSON object which will be the criteria for which doc to update
 #upsert: Create new doc if criteria fails
@@ -34,7 +73,7 @@ def execute_for_companies(pFunc, criteria=None):
 def db_modify_one(pISIN, obj, criteria, upsert=True, replace=False):
 	db = establish_conn()
 	if db == None:
-		logging.critical
+		logging.critical("Failed to connect to DB")
 		return None
 	update_result = None
 	try:

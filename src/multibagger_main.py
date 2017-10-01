@@ -19,22 +19,12 @@ def setup_logging():
 	logging.info("Multibagger logger setup... Done.")
 	logger_obj = logging.getLogger('multibagger')
 
-def download_periodic_data():
-	success = mc.download_periodic_data()
+def update_all_data(pISIN):
+	success = mc.update_all_data(pISIN)
 	if success == True:
-		logging.info("Periodic data downloaded successfully")
+		logging.info("All data successfully update")
 	else:
-		pass
-	return
-
-def download_daily_data(ISINs):
-	for ISIN in ISINs:
-		success = mc.download_daily_data(ISIN)
-		if success == True:
-			logging.info("Daily data downloaded successfully")
-		else:
-			pass
-	return
+		logging.warning("All data NOT successfully updated")
 
 def loadFromFile(pFileName):
 	try:
@@ -51,6 +41,7 @@ def loadFromFile(pFileName):
 if __name__ == "__main__":
 	setup_logging()
 	ISINs = loadFromFile("../data/ISIN.dat")
-	download_daily_data(ISINs)
+	update_all_data(ISINs)
+	#download_daily_data(ISINs)
 	#download_periodic_data()
 
