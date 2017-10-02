@@ -1,14 +1,13 @@
 import logging
 import search_stock as ss
 import db
-import sys
 
 def download_periodic_data_for_company(company):
-	print(company['company_name'])
 	return True
 
 def download_periodic_data():
-	(success_count, failure_count) = db.execute_for_each_company(download_periodic_data_for_company)
+	ISIN_list = [{"isin":"INE242C01024"},{"isin":"INE349W01017"},{"isin":"INE871C01020"}]
+	(success_count, failure_count) = db.execute_for_each_company(download_periodic_data_for_company, {"$or":ISIN_list})
 	return True
 
 def download_daily_data():

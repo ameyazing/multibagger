@@ -26,7 +26,6 @@ def establish_conn():
 #pCriteria: Criteria for find(). Check for None
 #Return value: {Success count, Failure Count}
 def execute_for_each_company(pFunc, pCriteria=None):
-	print("execute_for_each_company() pFunc:{}".format(pFunc))
 	db = establish_conn()
 	if db == None:
 		logging.critical("Failed to connect to DB")
