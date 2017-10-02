@@ -1,14 +1,15 @@
+import logging
 import requests
 from requests.models import Response
 
 MODULE_URL='http://www.moneycontrol.com/mccode/common/autosuggesion.php?query=INE002A01018&type=1&format=json&callback=suggest1'
-#URL='http://www.qoweurasdnkajefuio.com'
 
 def download_page(pURL, max_retry=3, attempt=0):
 	try:
 		r = requests.get(pURL)
 		return r
 	except requests.ConnectionError:
+		logging.warning("Connection Error for URL: {}".format(pURL))
 		response = Response()
 		response.code = "Connection Error"
 		response.error_type = "Connection"
@@ -19,6 +20,7 @@ def download_page(pURL, max_retry=3, attempt=0):
 		if attempt < max_retry:
 			download_page(pURL, max_retry, attemp + 1)
 		else:
+			logging.warning("Connection Timeout for URL: {}".format(pURL))
 			response = Response()
 			response.code = "Timeout"
 			response.error_type = "Connection"
@@ -26,6 +28,7 @@ def download_page(pURL, max_retry=3, attempt=0):
 			response._content = b'{"error":"Timeout"}'
 			return response
 	except requests.TooManyRedirects:
+		logging.warning("Too Many Redirects for URL: {}".format(pURL))
 		response = Response()
 		response.code = "Too many redirects"
 		response.error_type = "Redirects"
@@ -33,6 +36,7 @@ def download_page(pURL, max_retry=3, attempt=0):
 		response._content = b'{"error":"Too many redirects"}'
 		return response
 	except requests.RequestException as e:
+		logging.warning("Generic Request Exception for URL: {}".format(pURL))
 		response = Response()
 		response.code = "Unknown error"
 		response.error_type = "Generic"
