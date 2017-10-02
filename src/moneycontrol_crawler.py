@@ -1,9 +1,16 @@
 import logging
 import search_stock as ss
 import db
+import download_page as dp
 
 def download_periodic_data_for_company(company):
-	return True
+	url = company['mc_url']
+	resp = dp.download_page(url)
+	if resp.status_code == 200:
+		pass
+	else:
+		logging.warning("Failed to download URL: {}".format(url))
+		return False
 
 def download_periodic_data():
 	ISIN_list = [{"isin":"INE242C01024"},{"isin":"INE349W01017"},{"isin":"INE871C01020"}]
