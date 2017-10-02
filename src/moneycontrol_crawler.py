@@ -1,13 +1,14 @@
 import logging
 import search_stock as ss
 import db
+import sys
 
-def download_period_data_for_company(company):
+def download_periodic_data_for_company(company):
 	print(company['company_name'])
 	return True
 
 def download_periodic_data():
-	(success_count, failure_count) = db.execute_for_each_company(moneycontrol_crawler.download_periodic_data_for_company)
+	(success_count, failure_count) = db.execute_for_each_company(download_periodic_data_for_company)
 	return True
 
 def download_daily_data():
