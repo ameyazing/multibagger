@@ -5,12 +5,11 @@ import download_page as dp
 
 def download_periodic_data_for_company(company):
 	url = company['mc_url']
-	resp = dp.download_page(url)
-	if resp.status_code == 200:
-		pass
-	else:
+	respObj = dp.download_page(url)
+	if respObj.status_code != 200:
 		logging.warning("Failed to download URL: {}".format(url))
 		return False
+	resp = respObj.text
 
 def download_periodic_data():
 	ISIN_list = [{"isin":"INE242C01024"},{"isin":"INE349W01017"},{"isin":"INE871C01020"}]
