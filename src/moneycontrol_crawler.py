@@ -2,6 +2,7 @@ import logging
 import search_stock as ss
 import db
 import download_page as dp
+import mc_extract_urls as mcurl
 
 def download_periodic_data_for_company(company):
 	url = company['mc_url']
@@ -9,7 +10,10 @@ def download_periodic_data_for_company(company):
 	if respObj.status_code != 200:
 		logging.warning("Failed to download URL: {}".format(url))
 		return False
-	resp = respObj.text
+	urls = mcurl.extract_main_page_urls(resp.text)
+	if urls == None:
+		return False
+	#db.write_company_urls(company['isin'],
 
 def download_periodic_data():
 	ISIN_list = [{"isin":"INE242C01024"},{"isin":"INE349W01017"},{"isin":"INE871C01020"}]
